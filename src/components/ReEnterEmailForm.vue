@@ -1,6 +1,6 @@
 <template>
     <div class="login-form">
-        <div class="title">Login</div>
+        <div class="title">Enter email</div>
 
         <section>
             <form @submit.prevent.stop>
@@ -17,19 +17,6 @@
                     ></b-input>
                 </b-field>
 
-                <b-field
-                    :message="error.pass"
-                    :type="{ 'is-danger': !!error.pass }"
-                    label="Enter Password"
-                >
-                    <b-input
-                        @blur="validatePassword"
-                        @focus="error.pass = ''"
-                        password-reveal
-                        type="password"
-                        v-model="user.pass"
-                    ></b-input>
-                </b-field>
                 <b-field
                     :message="error.state"
                     :type="{ 'is-danger': !!error.state }"
@@ -63,23 +50,21 @@
                     <b-button
                         :disabled="loading"
                         :loading="loading"
-                        @click="login"
+                        @click="requestOTP"
                         class="has-text-weight-bold"
                         expanded
                         native-type="submit"
                         type="is-primary"
-                        >Login</b-button
+                        >Get OTP</b-button
                     >
                 </div>
             </form>
 
             <br />
+
             <div class="is-size-6">
-                <span class="m-r-8">Forgot password?</span>
-                <router-link
-                    class="has-text-weight-semibold"
-                    to="/reset-password"
-                    >Click here</router-link
+                <a @click="$router.go(-1)" class="has-text-weight-semibold"
+                    >Go back</a
                 >
             </div>
         </section>
@@ -87,25 +72,24 @@
 </template>
 
 <script>
-import EPassService from '../service/EPassService';
-import { saveAuthToken } from '../utils/session';
 import { isValidEmail } from '../utils/helpers';
+import EPassService from '../service/EPassService';
 import { getError } from '../utils/error-handler';
 
 export default {
-    name: 'LoginForm',
+    name: 'ReEnterEmailForm',
     components: {},
     data() {
+        const email = sessionStorage.getItem('email');
+        const state = sessionStorage.getItem('state');
+
         return {
-            registered: true,
             user: {
-                email: '',
-                pass: '',
-                state: null
+                email: email || '',
+                state: state || null
             },
             error: {
                 email: '',
-                pass: '',
                 state: ''
             },
             loading: false,
@@ -129,12 +113,6 @@ export default {
                 this.error.email = 'Invalid email address';
             }
         },
-        validatePassword() {
-            this.error.pass = '';
-            if (!this.user.pass) {
-                this.error.pass = 'Please enter password';
-            }
-        },
 
         validateState() {
             this.error.state = '';
@@ -145,13 +123,12 @@ export default {
 
         isValid() {
             this.validateEmail();
-            this.validatePassword();
             this.validateState();
 
-            return !this.error.email && !this.error.pass && !this.error.state;
+            return !this.error.email && !this.error.state;
         },
 
-        async login() {
+        async requestOTP() {
             this.apiError = null;
             if (!this.isValid()) {
                 return;
@@ -159,48 +136,22 @@ export default {
 
             this.loading = true;
             try {
-                const { data } = await EPassService.signIn(
+                await EPassService.requestOTP(
                     this.user.email.trim(),
-                    this.user.pass.trim(),
                     this.user.state
                 );
 
                 this.loading = false;
-
-                const { authToken } = data;
-
-                saveAuthToken(authToken);
-
-                this.$router.replace('/');
+                sessionStorage.setItem('email', this.user.email.trim());
+                sessionStorage.setItem('state', this.user.state);
+                this.$router.push('/reset-password/verify-otp');
             } catch (error) {
                 this.loading = false;
                 this.apiError = getError(error);
             }
-        },
-        fetchStateList() {
-            this.$store.dispatch('fetchStateList');
         }
-    },
-
-    created() {
-        this.fetchStateList();
     }
 };
 </script>
 
-<style lang="scss">
-.login-form {
-    section {
-        margin-top: 60px;
-        button {
-            height: 40px;
-        }
-        .label {
-            font-weight: 600;
-        }
-    }
-}
-.m-r-8 {
-    margin-right: 8px;
-}
-</style>
+<style lang="scss"></style>

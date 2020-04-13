@@ -1,23 +1,43 @@
 <template>
-    <div>
-        <sign-up-layout>
-            <login-form></login-form>
-        </sign-up-layout>
+    <div class="sign-up-container">
+        <div class="columns">
+            <div class="column full-height is-three-fifths">
+                <div class="sign-up-info-container full-height">
+                    <div class="is-flex ai-center logo-container">
+                        <img
+                            alt
+                            class="logo"
+                            src="../assets/logo.png"
+                            width="132"
+                        />
+                        <div class="seperator"></div>
+                        <div class="title is-4">Approver Dashboard</div>
+                    </div>
+
+                    <div class="title is-5">{{ typeText }}</div>
+
+                    <div class="login-bg">
+                        <img alt src="../assets/login-bg.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="column full-height mobile-login">
+                <div class="sign-up-form-container full-height">
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import SignUpLayout from '../components/SignUpLayout.vue';
-import LoginForm from '../components/LoginForm.vue';
 import { clearSession } from '../utils/session';
 
 export default {
-    name: 'SignUp',
-    components: { SignUpLayout, LoginForm },
+    name: 'SignUpLayout',
     data() {
         return {
-            welcomeText:
-                'Verify and issue commute passes to authorised people during the COVID pandemic',
+            welcomeText: 'Get a pass to commute during the COVID pandemic',
             typeText: ''
         };
     },
@@ -61,7 +81,7 @@ export default {
 .sign-up-form-container {
     padding: 60px 36px;
     background-color: #f5f5f5;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .sign-up-info-container {
@@ -77,6 +97,7 @@ export default {
 
         .seperator {
             height: 3rem;
+            background-color: #ededed;
         }
     }
 
