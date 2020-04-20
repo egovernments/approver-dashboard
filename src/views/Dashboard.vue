@@ -2,6 +2,15 @@
     <div>
         <app-header></app-header>
         <div class="app-body">
+            <div class="level-right faq-container">
+                <b-button
+                    class="has-text-weight-bold faq-button"
+                    @click="faqDownload"
+                    type="is-primary"
+                >
+                    FAQs
+                </b-button>
+            </div>
             <div class="container">
                 <b-tabs @change="onTabChange" class="block" size="is-medium">
                     <b-tab-item label="Pass requests">
@@ -47,6 +56,9 @@ export default {
                 this.$store.dispatch('fetchAllOrganizations');
                 break;
             }
+        },
+        faqDownload() {
+            window.open(process.env.VUE_APP_FAQ_LINK);
         }
     }
 };
@@ -84,5 +96,13 @@ export default {
 
 .jc-space-around {
     justify-content: space-around;
+}
+
+.faq-button {
+    width: 10%;
+}
+
+.faq-container {
+    max-width: 85%;
 }
 </style>
