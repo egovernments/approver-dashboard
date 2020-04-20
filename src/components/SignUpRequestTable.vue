@@ -10,19 +10,33 @@
                                     >Total signup requests:</span
                                 >
                                 <span class="has-text-weight-bold">
-                                    {{ signUpList.length }}
+                                    {{ filteredSignUpList.length }}
                                 </span>
                             </div>
                         </div>
                     </div>
                     <div class="level-right">
-                        <div class="level-item"></div>
+                        <div class="level-item">
+                            <div class="is-flex">
+                                <b-field grouped>
+                                    <b-field>
+                                        <b-input
+                                            icon="magnify"
+                                            icon-clickable
+                                            placeholder="Search..."
+                                            type="search"
+                                            v-model="searchText"
+                                        ></b-input>
+                                    </b-field>
+                                </b-field>
+                            </div>
+                        </div>
                     </div>
                 </nav>
 
                 <b-table
                     :current-page.sync="currentPage"
-                    :data="signUpList"
+                    :data="filteredSignUpList"
                     :default-sort-direction="defaultSortDirection"
                     :paginated="isPaginated"
                     :pagination-position="paginationPosition"
@@ -33,6 +47,18 @@
                     checkbox-position="left"
                 >
                     <template slot-scope="props">
+                        <b-table-column
+                            field="createdAt"
+                            label="Raised on"
+                            sortable
+                        >
+                            <div class="has-text-dark is-size-6">
+                                {{ props.row.createdAt | formatDate }}
+                            </div>
+                            <div class="has-text-grey is-size-6">
+                                {{ props.row.createdAt | formatTime }}
+                            </div>
+                        </b-table-column>
                         <b-table-column
                             field="orgName"
                             label="Organization Name"
@@ -132,6 +158,7 @@
 
 <script>
 import EPassService from '../service/EPassService';
+import dayjs from 'dayjs';
 import { showError, showSuccess } from '../utils/toast';
 import EmptyTable from './EmptyTable.vue';
 
@@ -143,6 +170,7 @@ export default {
     data() {
         return {
             isPaginated: true,
+            searchText: '',
             isPaginationSimple: false,
             paginationPosition: 'bottom',
             defaultSortDirection: 'asc',
@@ -156,6 +184,19 @@ export default {
     computed: {
         signUpList() {
             return this.$store.state.signUpList;
+        },
+        filteredSignUpList() {
+            return this.signUpList.filter(request =>
+                request.searchTerm.match(this.searchText.trim().toLowerCase())
+            );
+        }
+    },
+    filters: {
+        formatDate(date) {
+            return dayjs(new Date(date)).format("DD MMM' YY");
+        },
+        formatTime(date) {
+            return dayjs(new Date(date)).format('hh:mm A');
         }
     },
 
