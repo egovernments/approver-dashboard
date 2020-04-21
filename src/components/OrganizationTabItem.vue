@@ -145,14 +145,14 @@
                         <b-table-column field="status" label="Status" sortable>
                             <span
                                 :class="
-                                    `has-text-${
-                                        props.row.status == 'VERIFIED'
-                                            ? 'success'
-                                            : 'warning'
-                                    }`
+                                    `has-text-${getStatusClass(
+                                        props.row.accountStatus
+                                    )}`
                                 "
                                 class="has-text-weight-bold is-uppercase"
-                                >{{ props.row.status }}</span
+                                >{{
+                                    props.row.accountStatus | formatStatusLabel
+                                }}</span
                             >
                         </b-table-column>
                         <b-table-column label=" " width="30">
@@ -308,7 +308,24 @@ export default {
             };
 
             this.orgList.forEach(o => {
-                map[o.status] = o.status;
+                if (
+                    (o.accountStatus === 'POLICE_VERIFICATION_PENDING') |
+                    'UNVERIFIED'
+                ) {
+                    map['UNVERIFIED'] = this.$options.filters.formatStatusLabel(
+                        o.accountStatus
+                    );
+                } else if ((o.accountStatus === 'DECLINED') | 'BLOCKED') {
+                    map['DECLINED'] = this.$options.filters.formatStatusLabel(
+                        o.accountStatus
+                    );
+                } else {
+                    map[
+                        o.accountStatus
+                    ] = this.$options.filters.formatStatusLabel(
+                        o.accountStatus
+                    );
+                }
             });
 
             return map;
@@ -318,7 +335,9 @@ export default {
             if (this.statusOption === 'all') {
                 return this.orgList;
             }
-            return this.orgList.filter(o => o.status == this.statusOption);
+            return this.orgList.filter(
+                o => o.accountStatus == this.statusOption
+            );
         },
 
         filteredOrgList() {
@@ -337,6 +356,15 @@ export default {
         },
         formatNumber(number) {
             return new Intl.NumberFormat('en-IN').format(number);
+        },
+        formatStatusLabel(status) {
+            status = status.replace(/[_]/g, ' ');
+
+            if (status.toLowerCase() === 'police verification pending')
+                return 'UNVERFIED';
+            if (status.toLowerCase() === 'blocked') return 'DECLINED';
+
+            return status;
         }
     },
 
@@ -364,7 +392,10 @@ export default {
         getStatusClass(status) {
             if (status.match('all')) return 'dark';
 
-            if (status.match('UNVERIFIED')) return 'warning';
+            if (status.match('UNVERIFIED|POLICE_VERIFICATION_PENDING'))
+                return 'warning';
+
+            if (status.match('DECLINED')) return 'danger';
 
             if (status.match('VERIFIED')) return 'success';
 
