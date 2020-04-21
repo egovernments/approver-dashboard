@@ -149,6 +149,11 @@ export default {
                 authToken: getAuthToken()
             })
             .then(req => {
+                req.data.accounts.forEach(e => {
+                    e.searchTerm = [e.email, e.id, e.name, e.orgID, e.orgName]
+                        .join('|')
+                        .toLowerCase();
+                });
                 localStorage.setItem(
                     'signUpList',
                     JSON.stringify(req.data.accounts)
