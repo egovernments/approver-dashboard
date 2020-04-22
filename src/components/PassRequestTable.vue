@@ -127,12 +127,9 @@
                             </div>
                         </b-table-column>
 
-                        <b-table-column
-                            field="orderType"
-                            label="Order Id"
-                            sortable
-                            >{{ props.row.id }}</b-table-column
-                        >
+                        <b-table-column field="id" label="Order Id" sortable>{{
+                            props.row.id
+                        }}</b-table-column>
 
                         <b-table-column
                             field="requestCount"
