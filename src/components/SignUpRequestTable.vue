@@ -75,7 +75,7 @@
                             sortable
                         >
                             <div class="has-text-dark is-size-6">
-                                {{ props.row.peidStatus }}
+                                {{ props.row.peidStatus | formatPeidStatus }}
                             </div>
                         </b-table-column>
 
@@ -207,6 +207,13 @@ export default {
         },
         formatTime(date) {
             return dayjs(new Date(date)).format('hh:mm A');
+        },
+        formatPeidStatus(status) {
+            if (status.toLowerCase() === 'successful') {
+                return 'SUCCESSFUL';
+            } else {
+                return 'FAILED';
+            }
         }
     },
 
