@@ -150,9 +150,7 @@
                                     )}`
                                 "
                                 class="has-text-weight-bold is-uppercase"
-                                >{{
-                                    props.row.accountStatus | formatStatusLabel
-                                }}</span
+                                >{{ props.row.accountStatus }}</span
                             >
                         </b-table-column>
                         <b-table-column label=" " width="30">
@@ -308,26 +306,8 @@ export default {
             };
 
             this.orgList.forEach(o => {
-                if (
-                    (o.accountStatus === 'POLICE_VERIFICATION_PENDING') |
-                    'UNVERIFIED'
-                ) {
-                    map['UNVERIFIED'] = this.$options.filters.formatStatusLabel(
-                        o.accountStatus
-                    );
-                } else if ((o.accountStatus === 'DECLINED') | 'BLOCKED') {
-                    map['DECLINED'] = this.$options.filters.formatStatusLabel(
-                        o.accountStatus
-                    );
-                } else {
-                    map[
-                        o.accountStatus
-                    ] = this.$options.filters.formatStatusLabel(
-                        o.accountStatus
-                    );
-                }
+                map[o.accountStatus] = o.accountStatus;
             });
-
             return map;
         },
 
@@ -336,7 +316,7 @@ export default {
                 return this.orgList;
             }
             return this.orgList.filter(
-                o => o.accountStatus == this.statusOption
+                o => o.accountStatus === this.statusOption
             );
         },
 
@@ -356,15 +336,6 @@ export default {
         },
         formatNumber(number) {
             return new Intl.NumberFormat('en-IN').format(number);
-        },
-        formatStatusLabel(status) {
-            status = status.replace(/[_]/g, ' ');
-
-            if (status.toLowerCase() === 'police verification pending')
-                return 'UNVERFIED';
-            if (status.toLowerCase() === 'blocked') return 'DECLINED';
-
-            return status;
         }
     },
 
