@@ -74,7 +74,12 @@
                             label="PEID Verification"
                             sortable
                         >
-                            <div class="has-text-dark is-size-6">
+                            <div
+                                class="
+                                    `has-text-${getStatusClass(
+                                        props.row.peidStatus
+                                    )}`"
+                            >
                                 {{ props.row.peidStatus | formatPeidStatus }}
                             </div>
                         </b-table-column>
@@ -247,6 +252,14 @@ export default {
                 showSuccess(`Request Declined!`);
             } catch (error) {
                 showError(`Unable to decline request`);
+            }
+        },
+
+        getStatusClass(status) {
+            if (status.toLowerCase().match('successful')) {
+                return 'success';
+            } else {
+                return 'danger';
             }
         }
     },
