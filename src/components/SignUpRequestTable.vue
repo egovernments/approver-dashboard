@@ -75,10 +75,12 @@
                             sortable
                         >
                             <div
-                                class="
+                                :class="
                                     `has-text-${getStatusClass(
                                         props.row.peidStatus
-                                    )}`"
+                                    )}`
+                                "
+                                class="has-text-weight-bold is-uppercase"
                             >
                                 {{ props.row.peidStatus | formatPeidStatus }}
                             </div>
