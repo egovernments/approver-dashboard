@@ -69,6 +69,16 @@
                             </div>
                         </b-table-column>
 
+                        <b-table-column
+                            field="peidStatus"
+                            label="PEID Verification"
+                            sortable
+                        >
+                            <div class="has-text-dark is-size-6">
+                                {{ props.row.peidStatus }}
+                            </div>
+                        </b-table-column>
+
                         <b-table-column field="orgID" label="GSTIN Id" sortable>
                             <div class="has-text-dark is-size-6">
                                 {{ props.row.orgID }}
