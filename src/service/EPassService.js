@@ -5,9 +5,9 @@ import dotprop from 'dot-prop';
 import { isProd, isGithub } from '../utils/helpers';
 
 const BASE_URL = (() => {
-    const DEFAULT_API = 'https://viruscorona.co.in';
+    // const DEFAULT_API = 'https://viruscorona.co.in';
+    const DEFAULT_API = 'https://epassapi.egovernments.org/ecurfew';
     const EPASS_API = `${window.location.protocol}//${window.location.hostname}/ecurfew`;
-
     if (!isProd || isGithub) {
         return DEFAULT_API;
     }
