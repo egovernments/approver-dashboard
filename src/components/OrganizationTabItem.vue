@@ -358,12 +358,13 @@ export default {
             return new Intl.NumberFormat('en-IN').format(number);
         },
         formatStatusLabel(status) {
-            status = status.replace(/[_]/g, ' ');
+            if (status) {
+                status = status.replace(/[_]/g, ' ');
 
-            if (status.toLowerCase() === 'police verification pending')
-                return 'UNVERFIED';
-            if (status.toLowerCase() === 'blocked') return 'DECLINED';
-
+                if (status.toLowerCase() === 'police verification pending')
+                    return 'UNVERFIED';
+                if (status.toLowerCase() === 'blocked') return 'DECLINED';
+            }
             return status;
         }
     },
