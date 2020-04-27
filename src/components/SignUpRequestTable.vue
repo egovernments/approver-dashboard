@@ -219,7 +219,7 @@ export default {
             if (status.toLowerCase() === 'successful') {
                 return 'SUCCESSFUL';
             } else {
-                return 'FAILED';
+                return 'UNAVAILABLE';
             }
         }
     },
@@ -261,7 +261,7 @@ export default {
             if (status.toLowerCase().match('successful')) {
                 return 'success';
             } else {
-                return 'danger';
+                return 'warning';
             }
         }
     },
