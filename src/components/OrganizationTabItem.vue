@@ -391,15 +391,16 @@ export default {
             this.loading = false;
         },
         getStatusClass(status) {
-            if (status.match('all')) return 'dark';
+            if (status) {
+                if (status.match('all')) return 'dark';
 
-            if (status.match('UNVERIFIED|POLICE_VERIFICATION_PENDING'))
-                return 'warning';
+                if (status.match('UNVERIFIED|POLICE_VERIFICATION_PENDING'))
+                    return 'warning';
 
-            if (status.match('DECLINED')) return 'danger';
+                if (status.match('DECLINED')) return 'danger';
 
-            if (status.match('VERIFIED')) return 'success';
-
+                if (status.match('VERIFIED')) return 'success';
+            }
             return 'primary';
         }
     },
