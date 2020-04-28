@@ -3,6 +3,7 @@ import { SHOW_LOADING, HIDE_LOADING } from '../utils/contants';
 import { getAuthToken } from '../utils/session';
 import dotprop from 'dot-prop';
 import { isProd, isGithub } from '../utils/helpers';
+import { showError } from '../utils/toast';
 
 const BASE_URL = (() => {
     // const DEFAULT_API = 'https://viruscorona.co.in';
@@ -49,7 +50,11 @@ api.interceptors.response.use(
     },
     function(error) {
         const message = dotprop.get(error, 'response.data.message');
-        if (String(message).indexOf('invalid token') > -1) {
+        if (
+            error.response.status === 401 ||
+            String(message).indexOf('invalid token') > -1
+        ) {
+            showError('Token provided is not valid or has expired');
             window.dispatchEvent(new CustomEvent('LOGIN'));
             return Promise.reject();
         }
