@@ -104,10 +104,6 @@ export default {
                         .toLowerCase();
                 });
 
-                localStorage.setItem(
-                    'orderList',
-                    JSON.stringify(req.data.orders)
-                );
                 return req;
             });
     },
@@ -154,10 +150,6 @@ export default {
                         .join('|')
                         .toLowerCase();
                 });
-                localStorage.setItem(
-                    'signUpList',
-                    JSON.stringify(req.data.accounts)
-                );
                 return req;
             });
     },
@@ -179,10 +171,6 @@ export default {
                         .toLowerCase();
                 });
 
-                localStorage.setItem(
-                    'orgList',
-                    JSON.stringify(req.data.organizations)
-                );
                 return req;
             });
     },
