@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import EPassService from '../service/EPassService';
-import { showError } from '../utils/toast';
+import get from 'lodash/get';
+import { getError } from '../utils/error-handler';
 
 Vue.use(Vuex);
 
@@ -46,12 +47,17 @@ export default new Vuex.Store({
         async fetchAllOrganizations({ commit }) {
             try {
                 const { data } = await EPassService.getAllOrganizations();
+                const organizations = get(data, 'organizations', []).filter(
+                    item =>
+                        item.accountStatus === 'VERIFIED' ||
+                        item.accountStatus === 'DECLINED'
+                );
                 commit('setState', {
                     key: 'orgList',
-                    value: data.organizations
+                    value: organizations
                 });
             } catch (error) {
-                showError(`Unable to fetch organizations`);
+                getError(error);
             }
         },
         async fetchSignUpRequests({ commit }) {
@@ -62,7 +68,7 @@ export default new Vuex.Store({
                     value: data.accounts
                 });
             } catch (error) {
-                showError(`Unable to fetch requests`);
+                getError(error);
             }
         },
         async fetchAllOrders({ commit }) {
@@ -73,7 +79,7 @@ export default new Vuex.Store({
                     value: data.orders
                 });
             } catch (error) {
-                showError(`Unable to fetch requests`);
+                getError(error);
             }
         }
     }

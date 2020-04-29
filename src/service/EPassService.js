@@ -3,11 +3,12 @@ import { SHOW_LOADING, HIDE_LOADING } from '../utils/contants';
 import { getAuthToken } from '../utils/session';
 import dotprop from 'dot-prop';
 import { isProd, isGithub } from '../utils/helpers';
+import { showError } from '../utils/toast';
 
 const BASE_URL = (() => {
-    const DEFAULT_API = 'https://viruscorona.co.in';
+    // const DEFAULT_API = 'https://viruscorona.co.in';
+    const DEFAULT_API = 'https://epassapi.egovernments.org/ecurfew';
     const EPASS_API = `${window.location.protocol}//${window.location.hostname}/ecurfew`;
-
     if (!isProd || isGithub) {
         return DEFAULT_API;
     }
@@ -49,7 +50,11 @@ api.interceptors.response.use(
     },
     function(error) {
         const message = dotprop.get(error, 'response.data.message');
-        if (String(message).indexOf('invalid token') > -1) {
+        if (
+            error.response.status === 401 ||
+            String(message).indexOf('invalid token') > -1
+        ) {
+            showError('Token provided is not valid or has expired');
             window.dispatchEvent(new CustomEvent('LOGIN'));
             return Promise.reject();
         }
@@ -104,10 +109,6 @@ export default {
                         .toLowerCase();
                 });
 
-                localStorage.setItem(
-                    'orderList',
-                    JSON.stringify(req.data.orders)
-                );
                 return req;
             });
     },
@@ -154,10 +155,6 @@ export default {
                         .join('|')
                         .toLowerCase();
                 });
-                localStorage.setItem(
-                    'signUpList',
-                    JSON.stringify(req.data.accounts)
-                );
                 return req;
             });
     },
@@ -179,10 +176,6 @@ export default {
                         .toLowerCase();
                 });
 
-                localStorage.setItem(
-                    'orgList',
-                    JSON.stringify(req.data.organizations)
-                );
                 return req;
             });
     },

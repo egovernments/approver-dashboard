@@ -69,6 +69,23 @@
                             </div>
                         </b-table-column>
 
+                        <b-table-column
+                            field="peidStatus"
+                            label="PEID Verification"
+                            sortable
+                        >
+                            <div
+                                :class="
+                                    `has-text-${getStatusClass(
+                                        props.row.peidStatus
+                                    )}`
+                                "
+                                class="has-text-weight-bold is-uppercase"
+                            >
+                                {{ props.row.peidStatus | formatPeidStatus }}
+                            </div>
+                        </b-table-column>
+
                         <b-table-column field="orgID" label="GSTIN Id" sortable>
                             <div class="has-text-dark is-size-6">
                                 {{ props.row.orgID }}
@@ -197,6 +214,13 @@ export default {
         },
         formatTime(date) {
             return dayjs(new Date(date)).format('hh:mm A');
+        },
+        formatPeidStatus(status) {
+            if (status.toLowerCase() === 'successful') {
+                return 'SUCCESSFUL';
+            } else {
+                return 'UNAVAILABLE';
+            }
         }
     },
 
@@ -230,6 +254,14 @@ export default {
                 showSuccess(`Request Declined!`);
             } catch (error) {
                 showError(`Unable to decline request`);
+            }
+        },
+
+        getStatusClass(status) {
+            if (status.toLowerCase().match('successful')) {
+                return 'success';
+            } else {
+                return 'warning';
             }
         }
     },
