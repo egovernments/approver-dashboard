@@ -117,6 +117,13 @@
                             >{{ props.row.name }}</b-table-column
                         >
 
+                        <b-table-column
+                            field="name"
+                            label="Email Id"
+                            sortable
+                            >{{ props.row.identifier }}</b-table-column
+                        >
+
                         <b-table-column field="orgID" label="GSTIN Id" sortable>
                             <div class="has-text-dark is-size-6">
                                 {{ props.row.orgID }}
