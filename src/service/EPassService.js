@@ -6,8 +6,7 @@ import { isProd, isGithub } from '../utils/helpers';
 
 const BASE_URL = (() => {
     const DEFAULT_API = 'https://viruscorona.co.in';
-    const EPASS_API = `${window.location.protocol}//${window.location.hostname}/ecurfew`;
-
+    const EPASS_API = `${window.location.protocol}//${window.location.host}/ecurfew`;
     if (!isProd || isGithub) {
         return DEFAULT_API;
     }
@@ -79,11 +78,20 @@ export default {
         });
     },
 
-    verifyOTP({ emailId, otp }) {
+    verifyOTP({ emailId, otp, stateName }) {
         return api.post('/verifyOTP', {
             identifier: emailId,
+            stateName: stateName,
             accountIdentifierType: 'email',
             otp
+        });
+    },
+
+    updatePassword({ email, password, authToken }) {
+        return api.post('/updatePassword', {
+            email,
+            password,
+            authToken
         });
     },
 
@@ -200,6 +208,14 @@ export default {
             params: {
                 authToken: getAuthToken()
             }
+        });
+    },
+
+    requestOTP(emailId, stateName) {
+        return api.post('/requestOTP', {
+            identifier: emailId,
+            stateName,
+            accountIdentifierType: 'email'
         });
     },
 

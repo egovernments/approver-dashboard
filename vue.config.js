@@ -9,6 +9,13 @@ module.exports = {
         port: 9090,
         watchOptions: {
             poll: true
+        },
+        proxy: {
+            '^/ecurfew': {
+                target: 'https://epassapi.egovernments.org/',
+                ws: true,
+                changeOrigin: true
+            }
         }
     },
     publicPath: APPLICATION_PATH,
